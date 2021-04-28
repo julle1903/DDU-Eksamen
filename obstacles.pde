@@ -24,7 +24,7 @@ class Person extends Obstacle {
     Person(float xPos) {
         //2 typer en "infected" og en "Risikogruppe person"
         size = new PVector(20,20);
-        pos = new PVector(xPos,-size.y);
+        pos = new PVector(xPos,0-size.y);
     }
 
     void Display() {
@@ -34,14 +34,17 @@ class Person extends Obstacle {
     }
     
     void Move() {
-        pos.y +=1;
+        pos.y +=level.speed;
     }
 
-    // void Collide() {
-    //     if (pos.y > player.playerPos.y) {
-    //         println("dead2");
-    //     }
-    // }
+    void Collide() {
+        if (pos.y > player.playerPos.y-player.playerSize/2 && pos.y < player.playerPos.y+player.playerSize/2 &&
+        pos.x > player.playerPos.x-player.playerSize/2 && pos.x < player.playerPos.x+player.playerSize/2 ) {
+            persons.remove(this);
+            player.playerHealth -= 1;
+            print(player.playerHealth);
+        }
+    }
 }
 
 
@@ -62,14 +65,17 @@ class InfectedDoor extends Obstacle {
     }
 
     void Move() {
-        pos.y +=1;
+        pos.y +=level.speed;
     }
 
-    // void Collide() {
-    //     if (pos.y > player.playerPos.y) {
-    //         println("dead1");
-    //     }
-    // }
+    void Collide() {        
+        if (pos.y > player.playerPos.y-player.playerSize/2 && pos.y < player.playerPos.y+player.playerSize/2 &&
+        pos.x > player.playerPos.x-player.playerSize/2 && pos.x < player.playerPos.x+player.playerSize/2 ) {
+            player.playerHealth -= 1;
+            doors.remove(this);
+            print(player.playerHealth);
+        }
+    }
 }
 
 

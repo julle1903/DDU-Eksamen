@@ -3,9 +3,10 @@ class PlayerController{
     float playerSize;
     int counter = 3;
     float nextPos;
+    int playerHealth = 3;
     
     PlayerController(){
-        playerPos = new PVector(0,0);
+        playerPos = new PVector(0,600);
         playerSize = 50;    
         nextPos = level.square*counter;
     }
@@ -15,7 +16,7 @@ class PlayerController{
         nextPos = level.square*counter;
         player.playerPos.x = round(lerp(player.playerPos.x, player.nextPos, 0.55));
         fill(0);
-        ellipse(playerPos.x, playerPos.y+600, playerSize, playerSize);
+        ellipse(playerPos.x, playerPos.y, playerSize, playerSize);
     }
 
     void Move(){
