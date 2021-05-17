@@ -1,4 +1,5 @@
 class LevelController {
+    //Vars
     int square = width/6;
     float spawnTimeObstacles = 3;
     float spawnTimePowerups = 3;
@@ -9,8 +10,9 @@ class LevelController {
     float speed = 1;
 
     LevelController() {
+        //Load images and set timer for obs generation
         timer = 0;
-        PImage img = loadImage("vej2.png");
+        PImage img = loadImage("vej.png");
         for (int i = 0; i < bg.length; i++) {
             bg[i] = img;
         }
@@ -18,11 +20,14 @@ class LevelController {
         yVals[1] = height;
     }
 
-
+    //Draw scrolling background by moving bottom background to the top, when it goes below the bottom of the screen
     void drawBG() {
+        imageMode(CORNERS);
         speed += 0.001;
         for (int i = 0; i < yVals.length; i++) {
             yVals[i]+=speed;
+        }
+        for (int i = 0; i < yVals.length; i++){
             if (yVals[i] > height) {
                 yVals[i] = -height;
             }
@@ -33,21 +38,22 @@ class LevelController {
         d += speed/100;
     }
 
-    void Generate() {
+    //Generate obstacles timber
+    void generate() {
         timer-=1/frameRate;
 
         if (timer < 0) {
-            obsToGen();
+            genObs();
             timer=spawnTimeObstacles - speed/5;
         }
         if (timer < 0) {
-            obsToGen();
+            genObs();
             timer=spawnTimePowerups - speed/5;
         }
     }
 
-
-    void obsToGen(){
+    //Generate obstacles
+    void genObs(){
     int spawn = (int) random (1,5);
     ArrayList<Integer> l = new ArrayList<Integer>();
     for (int i = 0; i < spawn; i++){
@@ -57,37 +63,34 @@ class LevelController {
             l.add(lane);
         }
     }
+
+    //Generate random obstacle or powerup
     for (int i = 0; i < l.size(); i++){
-        switch (int(random(2))){
+        switch (int(random(3))){
+            //If Obstacle is generated
                 case 0 :
-                    persons.add(new Person(square*l.get(i)));
+                    infectedPerson.add(new InfectedPerson(square*l.get(i)));
                 break;
 
                 case 1 :
-                    doors.add(new InfectedDoor(square*l.get(i)));
-                break;
-            }
-        }
-    }
-
-    void powerupsToGen() {
-    int spawn = (int) random (1,5);
-    ArrayList<Integer> l = new ArrayList<Integer>();
-    for (int i = 0; i < spawn; i++){
-        int lane = (int)random(1,6);
-
-        if (!l.contains(lane)){
-            l.add(lane);
-        }
-    }
-    for (int i = 0; i < l.size(); i++){
-        switch (int(random(2))){
-                case 0 :
-                    powerups.add(new Mask(square*l.get(i)));
+                    oldMan.add(new OldMan(square*l.get(i)));
                 break;
 
-                case 1 :
-                    powerups.add(new Mask(square*l.get(i)));
+                //If powerup is generated
+                case 2 :
+                    if (random(2)<1) {
+                        if(random(2)<1) {
+                            masks.add(new Mask(square*l.get(i))); 
+                        } else {
+                            sprit.add(new Sprit(square*l.get(i))); 
+                        }
+                    } else {
+                       if (random(2)<1) {
+                           infectedPerson.add(new InfectedPerson(square*l.get(i)));
+                       } else {
+                           oldMan.add(new OldMan(square*l.get(i)));
+                       }
+                    }
                 break;
             }
         }
